@@ -9,7 +9,9 @@ class WsTransporter extends Client {
   constructor() {
     super({
       authStrategy: new LocalAuth(),
-      puppeteer: { headless: true },
+      puppeteer: {
+        args: ['--no-sandbox'],
+      }
     });
 
     console.log("Iniciando....");
