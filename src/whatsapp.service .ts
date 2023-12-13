@@ -1,7 +1,7 @@
-import { Client, LocalAuth } from "whatsapp-web.js";
+import { Client, LocalAuth, MessageMedia } from "whatsapp-web.js";
 import { image as imageQr } from "qr-image";
 import { Injectable } from "@nestjs/common";
-import { SolicitudMensajeDto } from "./dtos/solicitud-mensaje";
+import { SolicitudMensajeDto, SolicitudMensajeMediaDto } from "./dtos/solicitud-mensaje";
 
 @Injectable()
 export class WhatsappService extends Client {
@@ -14,7 +14,7 @@ export class WhatsappService extends Client {
     });
 
     console.log("Iniciando....");
-
+   
     this.initialize();
 
     this.on("ready", () => {
@@ -31,18 +31,30 @@ export class WhatsappService extends Client {
       console.log('Escanea el codigo QR que esta en la carepta tmp')
       this.generateImage(qr)
     });
+
+
+     
   }
 
-  /**
-   * Enviar mensaje de WS
-   * @param lead
-   * @returns
-   */
   async sendMsg(solicitud: SolicitudMensajeDto): Promise<any> {
     try {
       if (!this.status) return Promise.resolve({ error: "WAIT_LOGIN" });
       const { message, phone } = solicitud;
       const response = await this.sendMessage(`${phone}@c.us`, message);
+      return { id: response.id.id };
+      //return { response};
+    } catch (e: any) {
+      return Promise.resolve({ error: e.message });
+    }
+  }
+
+  async sendMsgMedia(solicitud: SolicitudMensajeMediaDto): Promise<any> {
+    try {
+      if (!this.status) return Promise.resolve({ error: "WAIT_LOGIN" });
+
+      var mediaFile = new MessageMedia(solicitud.mimeType, solicitud.data, solicitud.fileName, null);
+      const response = await this.sendMessage(`${solicitud.phone}@c.us`, mediaFile);
+
       return { id: response.id.id };
       //return { response};
     } catch (e: any) {
