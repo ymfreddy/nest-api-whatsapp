@@ -10,7 +10,7 @@ export class AppService {
   constructor(private readonly WsTransporter: WsTransporter) {}
 
   getQr() {
-    const path = join(__dirname, '../tmp/qr.svg');
+    const path = join(__dirname, '../tmp/qr.png');
     console.log(path);
     if (!existsSync(path))
       throw new BadRequestException(`No qr found`);
