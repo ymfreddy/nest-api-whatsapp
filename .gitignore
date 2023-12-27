@@ -1,13 +1,11 @@
 # compiled output
 /dist
 /node_modules
-/tmp
 /out-tsc
 /bazel-out
 /.wwebjs_auth
 /.wwebjs_cache
 
-tmp/qr.svg
 package-lock.json
 
 # Logs
